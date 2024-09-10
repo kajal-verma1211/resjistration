@@ -1,0 +1,109 @@
+{{> header title="Register Page"}}
+<main>
+  <div class="form-container">
+    <h2>Register</h2>
+    {{#if errorMessage}}
+    <p style="color:red">{{errorMessage}}</p>
+    {{/if}}
+    <form action="/register" method="POST" onsubmit="return validateForm()">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required onfocus="showEmailHelp()" onblur="hideEmailHelp()">
+      <small id="emailHelp">Please use @gmail.com</small>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required oninput="checkPasswordStrength()" onfocus="showPasswordHelp()" onblur="hidePasswordHelp()">
+      <small id="passwordHelp"></small>
+      <small id="passwordError" style="color:red; display:none;"></small>
+
+      <label for="confirm-password">Confirm Password</label>
+      <input type="password" id="confirm-password" name="confirmPassword" required>
+      <button type="submit">Register</button>
+    </form>
+  </div>
+</main>
+<script>
+function validateForm() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirm-password').value;
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+
+  if (!emailPattern.test(email)) {
+    alert('Please use a valid @gmail.com email address.');
+    return false;
+  }
+
+  if (!checkPasswordStrength()) {
+    return false;
+  }
+
+  if (password !== confirmPassword) {
+    alert('Passwords do not match.');
+    return false;
+  }
+
+  return true;
+}
+
+function showEmailHelp() {
+  document.getElementById('emailHelp').style.display = 'inline';
+}
+
+function hideEmailHelp() {
+  document.getElementById('emailHelp').style.display = 'none';
+}
+
+function showPasswordHelp() {
+  document.getElementById('passwordHelp').style.display = 'inline';
+}
+
+function hidePasswordHelp() {
+  document.getElementById('passwordHelp').style.display = 'none';
+}
+
+function checkPasswordStrength() {
+  const password = document.getElementById('password').value;
+  const errorElement = document.getElementById('passwordError');
+  errorElement.style.display = 'none';
+  errorElement.innerHTML = '';
+
+  const lengthPattern = /^.{10,15}$/;
+  const uppercasePattern = /[A-Z]/;
+  const lowercasePattern = /[a-z]/;
+  const digitPattern = /\d/;
+  const specialCharPattern = /[@$!%*?&]/;
+
+  if (!lengthPattern.test(password)) {
+    errorElement.style.display = 'inline';
+    errorElement.innerHTML = 'Password should be 10-15 characters long.';
+    return false;
+  }
+  if (!uppercasePattern.test(password)) {
+    errorElement.style.display = 'inline';
+    errorElement.innerHTML = 'Password should contain at least one uppercase letter.';
+    return false;
+  }
+  if (!lowercasePattern.test(password)) {
+    errorElement.style.display = 'inline';
+    errorElement.innerHTML = 'Password should contain at least one lowercase letter.';
+    return false;
+  }
+  if (!digitPattern.test(password)) {
+    errorElement.style.display = 'inline';
+    errorElement.innerHTML = 'Password should contain at least one digit.';
+    return false;
+  }
+  if (!specialCharPattern.test(password)) {
+    errorElement.style.display = 'inline';
+    errorElement.innerHTML = 'Password should contain at least one special character.';
+    return false;
+  }
+
+  return true;
+}
+</script>
+</body>
+</html>
